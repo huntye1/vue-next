@@ -6,10 +6,11 @@ import { effect } from '../src/effect'
 describe('reactivity/reactive', () => {
   test('Object', () => {
     const original = { foo: 1 }
-    const observed = reactive(original)
+    const observed: any = reactive(original)
     expect(observed).not.toBe(original)
     expect(isReactive(observed)).toBe(true)
     expect(isReactive(original)).toBe(false)
+    console.log(observed.__v_raw)
     // get
     expect(observed.foo).toBe(1)
     // has

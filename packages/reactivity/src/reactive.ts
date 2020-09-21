@@ -139,6 +139,7 @@ function createReactiveObject(
   baseHandlers: ProxyHandler<any>,
   collectionHandlers: ProxyHandler<any>
 ) {
+  // 如果不是对象，不能变成响应式的。
   if (!isObject(target)) {
     if (__DEV__) {
       console.warn(`value cannot be made reactive: ${String(target)}`)
@@ -147,6 +148,7 @@ function createReactiveObject(
   }
   // target is already a Proxy, return it.
   // exception: calling readonly() on a reactive object
+  // RAW指向的是原始的对象。
   if (
     target[ReactiveFlags.RAW] &&
     !(isReadonly && target[ReactiveFlags.IS_REACTIVE])
@@ -174,6 +176,7 @@ function createReactiveObject(
 
 export function isReactive(value: unknown): boolean {
   if (isReadonly(value)) {
+    // value可读，其原始值是响应式的，他就是响应式的？？？
     return isReactive((value as Target)[ReactiveFlags.RAW])
   }
   return !!(value && (value as Target)[ReactiveFlags.IS_REACTIVE])
@@ -193,6 +196,8 @@ export function toRaw<T>(observed: T): T {
   )
 }
 
+// ？？？ 为什么这样使用
+// 看起来只是为了测试，强行标志为原始类型boolean。
 export function markRaw<T extends object>(value: T): T {
   def(value, ReactiveFlags.SKIP, true)
   return value
