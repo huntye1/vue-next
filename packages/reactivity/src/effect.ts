@@ -86,6 +86,7 @@ function createReactiveEffect<T = any>(
       return options.scheduler ? undefined : fn()
     }
     if (!effectStack.includes(effect)) {
+      // 清除之前的依赖，重新收集。
       cleanup(effect)
       try {
         enableTracking()
