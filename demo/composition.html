@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- vue主包 -->
+    <script src="../packages/vue/dist/vue.global.js"></script>
+    <!-- reactivity包，需要单独引用 -->
+    <script src="../packages/reactivity/dist/reactivity.global.js"></script>
+</head>
+
+<body>
+    <div id="app"></div>
+    <script>
+        const {
+            createApp,
+            reactive,
+            computed,
+            ref,
+            toRef,
+            watch
+        } = Vue 
+        const {effect} = VueReactivity
+        const MyComponent = {
+            template: `
+                <button @click="click">
+                {{ count.count }}
+                </button>
+            `,
+            setup() {
+                const count = reactive({
+                    count:0
+                })
+                watch(() => count.count, (newValue,oldVaue ) => {
+                    console.log('new', newValue)
+                    console.log('old', oldVaue)
+                })
+                function click() {
+                    count.count++
+                }
+                return {
+                    count,
+                    click
+                }
+            }
+        }
+        createApp(MyComponent).mount('#app')
+    </script>
+</body>
+
+</html>
