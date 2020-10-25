@@ -90,10 +90,12 @@ function createReactiveEffect<T = any>(
       cleanup(effect)
       try {
         enableTracking()
+        // 当前收集的副作用，入栈。
         effectStack.push(effect)
         activeEffect = effect
         return fn()
       } finally {
+        // 当前收集完，出栈。
         effectStack.pop()
         resetTracking()
         activeEffect = effectStack[effectStack.length - 1]

@@ -811,4 +811,16 @@ describe('reactivity/effect', () => {
     expect(dummy).toBe(0)
     expect(record).toBeUndefined()
   })
+
+  it('it is a test', () => {
+    const arr: any = reactive([2])
+    let a
+    debugger
+    effect(() => {
+      a = arr[0]
+    })
+    expect(a).toBe(2)
+    arr.length = 0
+    expect(a).toBeUndefined
+  })
 })
