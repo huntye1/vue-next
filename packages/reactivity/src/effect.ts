@@ -185,6 +185,7 @@ export function trigger(
   const add = (effectsToAdd: Set<ReactiveEffect> | undefined) => {
     if (effectsToAdd) {
       effectsToAdd.forEach(effect => {
+        // 防止在effect中触发依赖变化，然后又触发依赖更新，然后boom！
         if (effect !== activeEffect || effect.allowRecurse) {
           effects.add(effect)
         }

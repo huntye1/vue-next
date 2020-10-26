@@ -131,6 +131,8 @@ describe('reactivity/computed', () => {
   })
 
   it('should support setter', () => {
+    // ？？？
+    // set 的值必须是reactive
     const n = ref(1)
     const plusOne = computed({
       get: () => n.value + 1,

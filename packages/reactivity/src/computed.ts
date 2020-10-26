@@ -39,6 +39,7 @@ class ComputedRefImpl<T> {
       scheduler: () => {
         if (!this._dirty) {
           this._dirty = true
+          // 虽然computed值是lazy计算的，但是当它的依赖发生变化时，对于外部应该感知到，它的值可能已经发生变化了。
           trigger(toRaw(this), TriggerOpTypes.SET, 'value')
         }
       }
@@ -50,13 +51,18 @@ class ComputedRefImpl<T> {
   get value() {
     if (this._dirty) {
       this._value = this.effect()
+
       this._dirty = false
     }
+    // computed计算值，也应该被当作依赖收集。
     track(toRaw(this), TrackOpTypes.GET, 'value')
     return this._value
   }
 
   set value(newValue: T) {
+    // 为什么set的时候，不主动触发更新？
+    // 因为依靠set value是reactive时 去触发更新？
+    // 所以computed里面用的变量，如果期望在computed时setter时触发更新，那么需要setter时用到对应的reactive变量。
     this._setter(newValue)
   }
 }
